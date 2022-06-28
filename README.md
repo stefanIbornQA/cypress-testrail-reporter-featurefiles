@@ -15,6 +15,11 @@ Core features:
 * Multi suite project support (set **suiteId=1** in **cypress.json** or set it as a part of runtime environment variables as **testRailSuiteId=1**)
 * Reporting retest status of a test cases - handy in terms of marking tests as flaky (test is reported with retest status for the first try and after second try it passes) Note: cypress retry logic must be enabled for this feature.  
 
+**Important note:** Keep your tests under the one of the following folder structure:
+
+* `cypress/e2e` - default path for Cypress v10 and above
+* `cypress/integration` - default path for Cypress v9 and bellow
+* `cypress/tests`
 
 ## Install
 
