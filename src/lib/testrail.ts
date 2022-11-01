@@ -62,7 +62,7 @@ export class TestRail {
     )
   }
 
-  public createRun (name: string, description: string, suiteId: number) {
+  public createRun (name: string, description: string, suiteId: number, refs?: string) {
     if (this.options.includeAllInTestRun === false){
       this.includeAll = false;
       this.caseIds = this.getCases(suiteId);
@@ -79,6 +79,7 @@ export class TestRail {
         data: JSON.stringify({
           suite_id: suiteId,
           name,
+          refs: refs ?? "",
           description,
           include_all: this.includeAll,
           case_ids: this.caseIds

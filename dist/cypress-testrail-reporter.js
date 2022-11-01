@@ -46,6 +46,9 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
         if (process.env.CYPRESS_TESTRAIL_REPORTER_GROUPID) {
             _this.reporterOptions.runName = process.env.CYPRESS_TESTRAIL_REPORTER_GROUPID;
         }
+        if (process.env.CYPRESS_TESTRAIL_REPORTER_REFS) {
+            _this.reporterOptions.refs = process.env.CYPRESS_TESTRAIL_REPORTER_REFS;
+        }
         _this.testRailApi = new testrail_1.TestRail(_this.reporterOptions);
         _this.testRailValidation = new testrail_validation_1.TestRailValidation(_this.reporterOptions);
         /**
@@ -101,7 +104,7 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
                         }
                     }
                     TestRailLogger.log("Creating TestRail Run with name: " + name_1);
-                    _this.testRailApi.createRun(name_1, description, _this.suiteId);
+                    _this.testRailApi.createRun(name_1, description, _this.suiteId, _this.reporterOptions.refs);
                 }
                 else {
                     // use the cached TestRail Run ID
