@@ -39,6 +39,10 @@ export class CypressTestRailReporter extends reporters.Spec {
       this.reporterOptions.runName = process.env.CYPRESS_TESTRAIL_REPORTER_GROUPID;
     }
 
+    if (process.env.CYPRESS_TESTRAIL_REPORTER_REFS) {
+      this.reporterOptions.refs = process.env.CYPRESS_TESTRAIL_REPORTER_REFS;
+    }
+
     this.testRailApi = new TestRail(this.reporterOptions);
     this.testRailValidation = new TestRailValidation(this.reporterOptions);
 
@@ -94,7 +98,7 @@ export class CypressTestRailReporter extends reporters.Spec {
               }
             }
             TestRailLogger.log(`Creating TestRail Run with name: ${name}`);
-            this.testRailApi.createRun(name, description, this.suiteId);
+            this.testRailApi.createRun(name, description, this.suiteId, this.reporterOptions.refs);
         } else {
             // use the cached TestRail Run ID
             this.runId = TestRailCache.retrieve('runId');

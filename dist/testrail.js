@@ -108,7 +108,7 @@ var TestRail = /** @class */ (function () {
         })
             .catch(function (error) { return console.error(error); }));
     };
-    TestRail.prototype.createRun = function (name, description, suiteId) {
+    TestRail.prototype.createRun = function (name, description, suiteId, refs) {
         var _this = this;
         if (this.options.includeAllInTestRun === false) {
             this.includeAll = false;
@@ -125,6 +125,7 @@ var TestRail = /** @class */ (function () {
             data: JSON.stringify({
                 suite_id: suiteId,
                 name: name,
+                refs: refs !== null && refs !== void 0 ? refs : "",
                 description: description,
                 include_all: this.includeAll,
                 case_ids: this.caseIds

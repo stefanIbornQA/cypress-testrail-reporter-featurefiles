@@ -78,6 +78,10 @@ environment variables, this option would be overwritten with it.
 
 **groupId**: _string_ (optional: needs "includeAllInTestRun": false ) The ID of the section/group. When you set `CYPRESS_TESTRAIL_REPORTER_GROUPID` in runtime environment variables, this option would be overwritten with it.
 
+**refs**: _string_ (optional: default is "") Ref of test run to create
+When you set `CYPRESS_TESTRAIL_REPORTER_REFS` in runtime environment variables, this option would be overwritten with it.
+A comma-separated list of references/requirements — requires TestRail 6.1 or later.
+
 **filter**: _string_ (optional: needs "includeAllInTestRun": false) Only return cases with matching filter string in the case title
 
 ## Multiple suite
