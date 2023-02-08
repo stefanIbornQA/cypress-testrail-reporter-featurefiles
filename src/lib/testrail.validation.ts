@@ -88,7 +88,6 @@ export class TestRailValidation {
     for (index = 0; index < cliArgs.length; ++index) {
       value = cliArgs[index];
       if (
-        value.includes("cypress/integration") === true ||
         value.includes("cypress/e2e") === true ||
         value.includes("cypress/tests") === true
       ) {

@@ -19,7 +19,6 @@ exports.CypressTestRailReporter = void 0;
 var mocha_1 = require("mocha");
 var moment = require("moment");
 var testrail_1 = require("./testrail");
-var shared_1 = require("./shared");
 var testrail_interface_1 = require("./testrail.interface");
 var testrail_validation_1 = require("./testrail.validation");
 var TestRailCache = require('./testrail.cache');
@@ -59,6 +58,7 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
         _this.testRailValidation.validateReporterOptions(_this.reporterOptions);
         if (_this.reporterOptions.suiteId) {
             _this.suiteId = _this.reporterOptions.suiteId;
+            _this.runId = _this.reporterOptions.runId;
         }
         /**
          * This will validate runtime environment variables
@@ -86,7 +86,7 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
                 * unless a cached value already exists for an existing TestRail Run in
                 * which case that will be used and no new one created.
                 */
-                if (!TestRailCache.retrieve('runId')) {
+                if (!_this.reporterOptions.runId) {
                     if (_this.reporterOptions.suiteId) {
                         TestRailLogger.log("Following suiteId has been set in cypress.json file: " + _this.suiteId);
                     }
@@ -108,7 +108,7 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
                 }
                 else {
                     // use the cached TestRail Run ID
-                    _this.runId = TestRailCache.retrieve('runId');
+                    _this.runId = _this.reporterOptions.runId;
                     TestRailLogger.log("Using existing TestRail Run with ID: '" + _this.runId + "'");
                 }
             });
@@ -129,12 +129,12 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
                 var numSpecFiles = _this.testRailValidation.countTestSpecFiles();
                 var counter = TestRailCache.retrieve('runCounter');
                 // load runId before purging testrail-cache.txt
-                _this.runId = TestRailCache.retrieve('runId');
+                _this.runId = _this.reporterOptions.runId;
                 if (numSpecFiles.length > counter) {
                     runCounter++;
                 }
                 else {
-                    _this.testRailApi.closeRun();
+                    //this.testRailApi.closeRun();
                     /**
                      * Remove testrail-cache.txt file at the end of execution
                      */
@@ -163,7 +163,7 @@ var CypressTestRailReporter = /** @class */ (function (_super) {
     CypressTestRailReporter.prototype.submitResults = function (status, test, comment) {
         var _a;
         var _this = this;
-        var caseIds = (0, shared_1.titleToCaseIds)(test.title);
+        var caseIds = shared_1.titleToCaseIds(test.title);
         var invalidCaseIds = caseIds.filter(function (caseId) { return !_this.serverTestCaseIds.includes(caseId); });
         caseIds = caseIds.filter(function (caseId) { return _this.serverTestCaseIds.includes(caseId); });
         if (invalidCaseIds.length > 0)

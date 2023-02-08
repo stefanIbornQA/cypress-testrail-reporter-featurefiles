@@ -22,7 +22,7 @@ export class CypressTestRailReporter extends reporters.Spec {
     super(runner);
 
     this.reporterOptions = options.reporterOptions;
-
+    
     if (process.env.CYPRESS_TESTRAIL_REPORTER_USERNAME) {
       this.reporterOptions.username = process.env.CYPRESS_TESTRAIL_REPORTER_USERNAME;
     }
@@ -53,7 +53,8 @@ export class CypressTestRailReporter extends reporters.Spec {
      */
     this.testRailValidation.validateReporterOptions(this.reporterOptions);
     if (this.reporterOptions.suiteId) {
-      this.suiteId = this.reporterOptions.suiteId
+      this.suiteId = this.reporterOptions.suiteId;
+      this.runId = this.reporterOptions.runId;
     }
     /**
      * This will validate runtime environment variables
@@ -82,7 +83,7 @@ export class CypressTestRailReporter extends reporters.Spec {
         * unless a cached value already exists for an existing TestRail Run in
         * which case that will be used and no new one created.
         */
-        if (!TestRailCache.retrieve('runId')) {
+        if (!this.reporterOptions.runId) {
             if (this.reporterOptions.suiteId) {
               TestRailLogger.log(`Following suiteId has been set in cypress.json file: ${this.suiteId}`);
             }
@@ -101,7 +102,7 @@ export class CypressTestRailReporter extends reporters.Spec {
             this.testRailApi.createRun(name, description, this.suiteId, this.reporterOptions.refs);
         } else {
             // use the cached TestRail Run ID
-            this.runId = TestRailCache.retrieve('runId');
+            this.runId = this.reporterOptions.runId;
             TestRailLogger.log(`Using existing TestRail Run with ID: '${this.runId}'`);
         }
       });
@@ -126,12 +127,12 @@ export class CypressTestRailReporter extends reporters.Spec {
         var numSpecFiles = this.testRailValidation.countTestSpecFiles();
         var counter = TestRailCache.retrieve('runCounter');
         // load runId before purging testrail-cache.txt
-        this.runId = TestRailCache.retrieve('runId');
+        this.runId = this.reporterOptions.runId;
 
         if (numSpecFiles.length > counter) {
           runCounter++
         } else {
-          this.testRailApi.closeRun();
+          //this.testRailApi.closeRun();
           /**
            * Remove testrail-cache.txt file at the end of execution
            */
@@ -158,7 +159,7 @@ export class CypressTestRailReporter extends reporters.Spec {
    * Note: Uploading of screenshot is configurable option
    */
   public submitResults (status, test, comment) {
-    let caseIds = titleToCaseIds(test.title)
+    let caseIds = shared_1.titleToCaseIds(test.title);
     const invalidCaseIds = caseIds.filter(caseId => !this.serverTestCaseIds.includes(caseId));
     caseIds = caseIds.filter(caseId => this.serverTestCaseIds.includes(caseId))
     if (invalidCaseIds.length > 0)
