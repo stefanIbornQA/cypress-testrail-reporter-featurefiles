@@ -16,7 +16,7 @@ export class TestRail {
 
   constructor(private options: TestRailOptions) {
     this.base = `${options.host}/index.php?/api/v2`;
-    this.runId;
+    this.runId= options.runId;
   }
 
   /**
@@ -86,16 +86,16 @@ export class TestRail {
         }),
       })
       .then(response => {
-          this.runId = response.data.id;
+          //this.runId = response.data.id;
           // cache the TestRail Run ID
-          TestRailCache.store('runId', this.runId);
+          //TestRailCache.store('runId', this.runId);
       })
       .catch(error => console.error(error))
     );
   }
 
   public deleteRun() {
-    this.runId = TestRailCache.retrieve('runId');
+    //this.runId = TestRailCache.retrieve('runId');
     this.makeSync(
       axios({
         method: 'post',
@@ -110,7 +110,7 @@ export class TestRail {
   }
 
   public publishResults(results: TestRailResult[]) {
-    this.runId = TestRailCache.retrieve('runId');
+    //this.runId = TestRailCache.retrieve('runId');
     return this.makeSync(
       axios({
         method: 'post',
@@ -169,7 +169,7 @@ export class TestRail {
   };
 
   public closeRun() {
-    this.runId = TestRailCache.retrieve('runId');
+    //this.runId = TestRailCache.retrieve('runId');
     this.makeSync(
       axios({
         method: 'post',
